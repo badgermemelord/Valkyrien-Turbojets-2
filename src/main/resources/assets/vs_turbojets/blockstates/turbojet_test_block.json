@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "vs_turbojets:block/turbojet_test_block" }
+  }
+}
