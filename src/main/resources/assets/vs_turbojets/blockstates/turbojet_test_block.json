@@ -1,5 +1,27 @@
 {
   "variants": {
-    "": { "model": "vs_turbojets:block/turbojet_test_block" }
+    "facing=down": {
+      "model": "minecraft:block/piston",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "minecraft:block/piston",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minecraft:block/piston"
+    },
+    "facing=south": {
+      "model": "minecraft:block/piston",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "minecraft:block/piston",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "minecraft:block/piston",
+      "y": 270
+    }
   }
 }

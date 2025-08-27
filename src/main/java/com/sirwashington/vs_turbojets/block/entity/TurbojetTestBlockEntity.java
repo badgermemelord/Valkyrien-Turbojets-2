@@ -1,11 +1,14 @@
 package com.sirwashington.vs_turbojets.block.entity;
 
+import com.sirwashington.vs_turbojets.block.custom.TurbojetTestBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.valkyrienskies.core.api.ships.ServerShip;
+import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 public class TurbojetTestBlockEntity extends BlockEntity {
 
@@ -14,12 +17,42 @@ public class TurbojetTestBlockEntity extends BlockEntity {
         super(ModBlockEntities.TURBOJET_TEST_BLOCK_ENTITY, blockPos, blockState);
     }
 
-
-
-
     public static void tick(Level level, BlockPos pos, BlockState state, TurbojetTestBlockEntity entity) {
         //DO TICK STUFF
-        System.out.println("ee");
+        System.out.println("rot: " + level.getBlockState(pos).getValue(TurbojetTestBlock.FACING));
+    }
+
+    public static void applyForces(Level level, BlockPos pos) {
+        if (!level.isClientSide) {
+
+            if(VSGameUtilsKt.isBlockInShipyard(level, pos))
+            {
+                ServerShip ship = (ServerShip) VSGameUtilsKt.getShipManagingPos(world,pos);
+                Vec3d middle = VSGameUtilsKt.toWorldCoordinates(ship, Vec3d.of(pos));
+                BlockPos block = new BlockPos((int) middle.x, (int) middle.y, (int) middle.z);
+
+                if(be.waterBelow ==-1)
+                {
+
+                    for (int i = 0; i < 5; i++) {
+                        if(world.getBlockState(block.down(i)).isOf(Blocks.WATER))
+                        {
+                            be.setWaterBelow(i);
+                            System.out.println("found water at "+i);
+                            break;
+                        }
+                    }
+                }
+                if(world.getBlockState(block.down(be.waterBelow)).isOf(Blocks.WATER) && !world.getBlockState(block).isOf(Blocks.WATER))
+                {
+                    EurekaShipControl shipControl = ship.getAttachment(EurekaShipControl.class);
+                    shipControl.setPowerLinear(shipControl.getPowerLinear()+6000000);
+                    shipControl.setPowerAngular(shipControl.getPowerLinear()+1);
+                }
+            }
+
+            be.markDirty();
+        }
     }
 
 }
