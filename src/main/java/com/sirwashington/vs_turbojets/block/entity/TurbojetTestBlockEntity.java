@@ -19,7 +19,7 @@ public class TurbojetTestBlockEntity extends BlockEntity {
 
     public static void tick(Level level, BlockPos pos, BlockState state, TurbojetTestBlockEntity entity) {
         //DO TICK STUFF
-        System.out.println("e");
+        System.out.println("ee");
     }
 
 }
