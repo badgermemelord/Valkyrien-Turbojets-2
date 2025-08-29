@@ -7,6 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
@@ -22,36 +23,17 @@ public class TurbojetTestBlockEntity extends BlockEntity {
         System.out.println("rot: " + level.getBlockState(pos).getValue(TurbojetTestBlock.FACING));
     }
 
-    public static void applyForces(Level level, BlockPos pos) {
+    public static void applyForces(Level level, BlockPos pos, TurbojetTestBlockEntity be) {
         if (!level.isClientSide) {
 
             if(VSGameUtilsKt.isBlockInShipyard(level, pos))
             {
-                ServerShip ship = (ServerShip) VSGameUtilsKt.getShipManagingPos(world,pos);
-                Vec3d middle = VSGameUtilsKt.toWorldCoordinates(ship, Vec3d.of(pos));
+                ServerShip ship = (ServerShip) VSGameUtilsKt.getShipManagingPos(level, pos);
+                Vec3 middle = VSGameUtilsKt.toWorldCoordinates(ship, Vec3.atLowerCornerOf(pos));
                 BlockPos block = new BlockPos((int) middle.x, (int) middle.y, (int) middle.z);
-
-                if(be.waterBelow ==-1)
-                {
-
-                    for (int i = 0; i < 5; i++) {
-                        if(world.getBlockState(block.down(i)).isOf(Blocks.WATER))
-                        {
-                            be.setWaterBelow(i);
-                            System.out.println("found water at "+i);
-                            break;
-                        }
-                    }
-                }
-                if(world.getBlockState(block.down(be.waterBelow)).isOf(Blocks.WATER) && !world.getBlockState(block).isOf(Blocks.WATER))
-                {
-                    EurekaShipControl shipControl = ship.getAttachment(EurekaShipControl.class);
-                    shipControl.setPowerLinear(shipControl.getPowerLinear()+6000000);
-                    shipControl.setPowerAngular(shipControl.getPowerLinear()+1);
-                }
+                
             }
 
-            be.markDirty();
         }
     }
 
