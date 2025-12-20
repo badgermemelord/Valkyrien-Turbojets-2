@@ -52,6 +52,8 @@ dependencies {
 
 	//Kotlin :INTJThreat:
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+    include("com.fasterxml:classmate:1.5.1")
+    implementation("com.fasterxml:classmate:1.5.1")
 
 
 	// Valkyrien Skies 2
