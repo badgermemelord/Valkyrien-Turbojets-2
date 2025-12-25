@@ -19,21 +19,30 @@ import org.valkyrienskies.mod.common.util.GameToPhysicsAdapter;
 
 public class TurbojetTestBlockEntity extends BlockEntity {
 
-    public static int lifetime = 0;
+    private int lifetime = 0;
 
 
     public TurbojetTestBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlockEntities.TURBOJET_TEST_BLOCK_ENTITY, blockPos, blockState);
     }
 
+    public int getLifeTime() {
+        return lifetime;
+    }
+
     public static void tick(Level level, BlockPos pos, BlockState state, TurbojetTestBlockEntity entity) {
+
         //DO TICK STUFF
         if (level.getBlockState(pos).getBlock() != Blocks.VOID_AIR) {
             System.out.println("rot: " + level.getBlockState(pos).getValue(TurbojetTestBlock.FACING));
+            //applyForces(level, pos, entity);
         }
-        if(lifetime == 1)
+        if(entity.lifetime < 20) {
             applyForces(level, pos, entity);
-        lifetime++;
+            System.out.println("applied");
+        }
+
+        entity.lifetime++;
     }
 
     public static void applyForces(Level level, BlockPos pos, TurbojetTestBlockEntity be) {
@@ -49,7 +58,7 @@ public class TurbojetTestBlockEntity extends BlockEntity {
 
                 BlockPos block = new BlockPos((int) middle.x, (int) middle.y, (int) middle.z);
                 Vector3dc enginePos = new Vector3d((int) middle.x, (int) middle.y, (int) middle.z);
-                Vector3dc forceToApply = new Vector3d(0,100000.0,0);
+                Vector3dc forceToApply = new Vector3d(0,0,1000000.0);
                 //forces.applyInvariantForceToPos(ship.getChunkClaim().toLong(), forceToApply, enginePos);
                 forces.applyInvariantForce(ship.getId(), forceToApply);
 
