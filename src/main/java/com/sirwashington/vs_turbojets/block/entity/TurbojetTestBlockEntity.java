@@ -1,6 +1,7 @@
 package com.sirwashington.vs_turbojets.block.entity;
 
 import com.sirwashington.vs_turbojets.block.custom.TurbojetTestBlock;
+import com.sirwashington.vs_turbojets.network.EquationNetwork;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.Level;
@@ -32,17 +33,22 @@ public class TurbojetTestBlockEntity extends BlockEntity {
 
     public static void tick(Level level, BlockPos pos, BlockState state, TurbojetTestBlockEntity entity) {
 
-        //DO TICK STUFF
-        if (level.getBlockState(pos).getBlock() != Blocks.VOID_AIR) {
-            System.out.println("rot: " + level.getBlockState(pos).getValue(TurbojetTestBlock.FACING));
-            //applyForces(level, pos, entity);
-        }
-        if(entity.lifetime < 20) {
-            applyForces(level, pos, entity);
-            System.out.println("applied");
-        }
+        if (!level.isClientSide) {
+            if (entity.lifetime == 0)
+                EquationNetwork.attemptNetworkCreation(pos, level, entity);
 
-        entity.lifetime++;
+            //DO TICK STUFF
+            if (level.getBlockState(pos).getBlock() != Blocks.VOID_AIR) {
+                //System.out.println("rot: " + level.getBlockState(pos).getValue(TurbojetTestBlock.FACING));
+                //applyForces(level, pos, entity);
+            }
+            if(entity.lifetime < 20) {
+                //applyForces(level, pos, entity);
+                //System.out.println("applied");
+            }
+
+            entity.lifetime++;
+        }
     }
 
     public static void applyForces(Level level, BlockPos pos, TurbojetTestBlockEntity be) {
