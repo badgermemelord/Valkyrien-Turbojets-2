@@ -21,6 +21,8 @@ public class TurbojetTestBlockEntity extends BlockEntity {
 
     private int lifetime = 0;
 
+    private EngineNetwork network = new EngineNetwork();
+
 
     public TurbojetTestBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlockEntities.TURBOJET_TEST_BLOCK_ENTITY, blockPos, blockState);
@@ -30,14 +32,26 @@ public class TurbojetTestBlockEntity extends BlockEntity {
         return lifetime;
     }
 
+    public EngineNetwork getNetwork() {
+        return network;
+    }
+
+    public void clearNetwork() {
+        network = null;
+    }
+
+    public void setNetwork(EngineNetwork newNetwork) {
+        network = newNetwork;
+    }
+
     public static void tick(Level level, BlockPos pos, BlockState state, TurbojetTestBlockEntity entity) {
 
-        EngineNetwork network = new EngineNetwork();
+        entity.network = new EngineNetwork();
 
         if (!level.isClientSide) {
             if (entity.lifetime == 0)
                 //NetworkUtil.attemptNetworkCreation(pos, level, entity);
-                network.attemptNetworkCreation(pos, level, entity);
+                entity.network.attemptNetworkCreation(pos, level, entity);
 
             //DO TICK STUFF
             if (level.getBlockState(pos).getBlock() != Blocks.VOID_AIR) {

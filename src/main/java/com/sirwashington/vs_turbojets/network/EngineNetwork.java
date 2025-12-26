@@ -18,27 +18,24 @@ public class EngineNetwork {
 
     ArrayList<BlockPos> memberBlocks = new ArrayList<>();
 
+    Direction networkFacing;
+
     public void attemptNetworkCreation(BlockPos sourcePos, Level world, TurbojetTestBlockEntity networkCreator) {
 
-        Direction networkFacing = world.getBlockState(sourcePos).getValue(FACING);
+        networkFacing = world.getBlockState(sourcePos).getValue(FACING);
         Vec3i facingVector = networkFacing.getNormal();
 
         System.out.println("started network creation");
-/*        for (int i = -maxRange; i <= maxRange; i++) {
-            BlockPos currentPos = sourcePos.offset(facingVector.multiply(i));
-            BlockState currentState = world.getBlockState(currentPos);
-            System.out.println("pos: " + currentPos + " state: " + currentState);
-            if (currentState.is(ModTags.Blocks.TURBOJET_PART_BLOCKS)) {
-                System.out.println("found an engine part");
-            }
-        }*/
+
+        memberBlocks.add(sourcePos);
 
         //Forward loop
-        for (int i = 0; i <= maxRange; i++) {
+        for (int i = 1; i <= maxRange; i++) {
             System.out.println("forward");
             BlockPos currentPos = sourcePos.offset(facingVector.multiply(i));
             BlockState currentState = world.getBlockState(currentPos);
-            if (currentState.is(ModTags.Blocks.TURBOJET_PART_BLOCKS)) {
+            if (isValidEngineBlock(currentState)) {
+                deleteLesserNetwork(currentPos, world);
                 System.out.println("found an engine part");
                 memberBlocks.add(currentPos);
             }
@@ -52,7 +49,8 @@ public class EngineNetwork {
             System.out.println("rearward");
             BlockPos currentPos = sourcePos.offset(facingVector.multiply(i));
             BlockState currentState = world.getBlockState(currentPos);
-            if (currentState.is(ModTags.Blocks.TURBOJET_PART_BLOCKS)) {
+            if (isValidEngineBlock(currentState)) {
+                deleteLesserNetwork(currentPos, world);
                 System.out.println("found an engine part");
                 memberBlocks.add(currentPos);
             }
@@ -62,7 +60,30 @@ public class EngineNetwork {
             }
         }
 
+        NetworkManager.addNetworkToList(this);
         System.out.println("finished creation, list: " + memberBlocks);
+
+    }
+
+    public void performBlockCheck() {
+
+    }
+
+    public boolean isValidEngineBlock(BlockState state) {
+        return state.is(ModTags.Blocks.TURBOJET_PART_BLOCKS) && state.getValue(FACING).equals(networkFacing);
+    }
+
+    public void deleteLesserNetwork(BlockPos pos, Level level) {
+        TurbojetTestBlockEntity internalEntity = (TurbojetTestBlockEntity)level.getBlockEntity(pos);
+        if (internalEntity != null) {
+            internalEntity.clearNetwork();
+            NetworkManager.removeNetworkFromList(internalEntity.getNetwork());
+        }
+    }
+
+    public static void tick(Level level) {
+
+        System.out.println("Started tick of network: " + NetworkManager.;
 
     }
 
