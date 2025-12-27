@@ -1,37 +1,39 @@
 package com.sirwashington.vs_turbojets.network;
 
+import net.minecraft.world.level.Level;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class NetworkManager {
 
 
-    public static ArrayList<EngineNetwork> networkList = new ArrayList<>();
 
-    public static HashMap<Long, EngineNetwork> networ = new HashMap<Long, EngineNetwork>();
+    public static HashMap<Long, EngineNetwork> networkList = new HashMap<Long, EngineNetwork>();
 
-    public static EngineNetwork getNetworkFromList() {
-        networ.
-        return networkList.
+    public static EngineNetwork getNetworkFromList(Long key) {
+        return networkList.get(key);
     }
 
-    public static void addNetworkToList(EngineNetwork network) {
-        networkList.add(network);
+    public static void addNetworkToList(EngineNetwork network, Long key) {
+        networkList.put(key, network);
     }
 
-    public static void removeNetworkFromList(EngineNetwork network) {
-        networkList.remove(network);
+    public static void removeNetworkFromList(Long key) {
+        networkList.remove(key);
     }
 
     public static void CleanupNetworkList() {
-        for (EngineNetwork network : networkList) {
-            //if network.
-        }
+
     }
 
-    public static void TickNetworks() {
-        for (EngineNetwork network : networkList) {
-            network.tick
+    public static void TickNetworks(Level level) {
+/*        for (EngineNetwork network : networkList.values()) {
+            network.ti
+        }*/
+        for (Long key : networkList.keySet()) {
+            EngineNetwork network = networkList.get(key);
+            network.tick(level, key);
         }
     }
 

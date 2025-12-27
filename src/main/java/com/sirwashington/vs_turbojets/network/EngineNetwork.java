@@ -15,20 +15,17 @@ import static com.sirwashington.vs_turbojets.block.custom.TurbojetTestBlock.FACI
 public class EngineNetwork {
 
     public static int maxRange = 10;
-
     ArrayList<BlockPos> memberBlocks = new ArrayList<>();
-
     Direction networkFacing;
+    Long LongPos;
 
     public void attemptNetworkCreation(BlockPos sourcePos, Level world, TurbojetTestBlockEntity networkCreator) {
 
         networkFacing = world.getBlockState(sourcePos).getValue(FACING);
         Vec3i facingVector = networkFacing.getNormal();
-
-        System.out.println("started network creation");
-
+        LongPos = sourcePos.asLong();
+        System.out.println("started network creation from: " + sourcePos);
         memberBlocks.add(sourcePos);
-
         //Forward loop
         for (int i = 1; i <= maxRange; i++) {
             System.out.println("forward");
@@ -59,8 +56,7 @@ public class EngineNetwork {
                 break;
             }
         }
-
-        NetworkManager.addNetworkToList(this);
+        NetworkManager.addNetworkToList(this, LongPos);
         System.out.println("finished creation, list: " + memberBlocks);
 
     }
@@ -77,13 +73,13 @@ public class EngineNetwork {
         TurbojetTestBlockEntity internalEntity = (TurbojetTestBlockEntity)level.getBlockEntity(pos);
         if (internalEntity != null) {
             internalEntity.clearNetwork();
-            NetworkManager.removeNetworkFromList(internalEntity.getNetwork());
+            NetworkManager.removeNetworkFromList(internalEntity.getNetwork().LongPos);
         }
     }
 
-    public static void tick(Level level) {
+    public static void tick(Level level, Long key) {
 
-        System.out.println("Started tick of network: " + NetworkManager.;
+        System.out.println("Started tick of network: " + NetworkManager.networkList.get(key));
 
     }
 

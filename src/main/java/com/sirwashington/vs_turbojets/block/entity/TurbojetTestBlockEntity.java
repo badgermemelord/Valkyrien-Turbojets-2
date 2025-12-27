@@ -46,9 +46,10 @@ public class TurbojetTestBlockEntity extends BlockEntity {
 
     public static void tick(Level level, BlockPos pos, BlockState state, TurbojetTestBlockEntity entity) {
 
-        entity.network = new EngineNetwork();
+        //entity.network = new EngineNetwork();
 
         if (!level.isClientSide) {
+            System.out.println();
             if (entity.lifetime == 0)
                 //NetworkUtil.attemptNetworkCreation(pos, level, entity);
                 entity.network.attemptNetworkCreation(pos, level, entity);
