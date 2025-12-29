@@ -1,30 +1,27 @@
 package com.sirwashington.vs_turbojets.block.entity;
 
 import com.sirwashington.vs_turbojets.network.EngineNetwork;
-import com.sirwashington.vs_turbojets.network.NetworkUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.valkyrienskies.core.api.ships.ServerShip;
-import org.valkyrienskies.core.impl.shadow.En;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 import org.valkyrienskies.mod.common.ValkyrienSkiesMod;
 import org.valkyrienskies.mod.common.util.GameToPhysicsAdapter;
 
 
-public class TurbojetTestBlockEntity extends BlockEntity {
+public class CompressorBlockEntity extends BlockEntity {
 
     private int lifetime = 0;
 
     private EngineNetwork network = new EngineNetwork();
 
 
-    public TurbojetTestBlockEntity(BlockPos blockPos, BlockState blockState) {
+    public CompressorBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlockEntities.TURBOJET_TEST_BLOCK_ENTITY, blockPos, blockState);
     }
 
@@ -48,7 +45,7 @@ public class TurbojetTestBlockEntity extends BlockEntity {
         network = newNetwork;
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, TurbojetTestBlockEntity entity) {
+    public static void tick(Level level, BlockPos pos, BlockState state, CompressorBlockEntity entity) {
 
         if (!level.isClientSide) {
             if (entity.lifetime == 0) {
@@ -62,7 +59,7 @@ public class TurbojetTestBlockEntity extends BlockEntity {
         }
     }
 
-    public static void applyForces(Level level, BlockPos pos, TurbojetTestBlockEntity be) {
+    public static void applyForces(Level level, BlockPos pos, CompressorBlockEntity be) {
         if (!level.isClientSide) {
 
             if(VSGameUtilsKt.isBlockInShipyard(level, pos))

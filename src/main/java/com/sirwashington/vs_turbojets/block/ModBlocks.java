@@ -17,6 +17,9 @@ public class ModBlocks {
     public static final Block TURBOJET_TEST_BLOCK = registerBlock("turbojet_test_block",
             new TurbojetTestBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
 
+    public static final Block COMPRESSOR_BLOCK = registerBlock("compressor_block",
+            new TurbojetTestBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
+
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(VSTurbojetsMod.MOD_ID, name), block);
