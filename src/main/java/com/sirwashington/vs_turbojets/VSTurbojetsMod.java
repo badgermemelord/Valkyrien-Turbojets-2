@@ -2,9 +2,18 @@ package com.sirwashington.vs_turbojets;
 
 import com.sirwashington.vs_turbojets.block.ModBlocks;
 import com.sirwashington.vs_turbojets.block.entity.ModBlockEntities;
+import com.sirwashington.vs_turbojets.block.entity.TurbojetTestBlockEntity;
 import com.sirwashington.vs_turbojets.item.ModItems;
+import com.sirwashington.vs_turbojets.network.NetworkUtil;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.valkyrienskies.mod.fabric.common.ValkyrienSkiesModFabric;
@@ -27,6 +36,12 @@ public class VSTurbojetsMod implements ModInitializer {
 		ModItems.RegisterModItems();
 		ModBlocks.registerModblocks();
 		ModBlockEntities.registerBlockEntities();
+
+        PlayerBlockBreakEvents.AFTER.register((level, player, pos, state, blockEntity) -> {
+            NetworkUtil.updateNeighbours(level, pos);
+        });
+
+
 
 		LOGGER.info("Hello Fabric world!");
 	}

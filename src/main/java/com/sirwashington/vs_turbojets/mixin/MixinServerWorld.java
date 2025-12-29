@@ -20,9 +20,9 @@ public abstract class MixinServerWorld {
 
     @Inject(at = @At("HEAD"), method = "tick", cancellable = true)
     public void tick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
-        System.out.println("initiated mixin tick");
+        //System.out.println("initiated mixin tick");
         ServerLevel.class.cast(this);
-        NetworkManager.TickNetworks(this.getLevel());
+        //NetworkManager.TickNetworks(this.getLevel());
     }
 
 }

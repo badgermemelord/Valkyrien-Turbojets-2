@@ -36,6 +36,10 @@ public class TurbojetTestBlockEntity extends BlockEntity {
         return network;
     }
 
+    public void createNewNetwork() {
+        network = new EngineNetwork();
+    }
+
     public void clearNetwork() {
         network = null;
     }
@@ -49,10 +53,10 @@ public class TurbojetTestBlockEntity extends BlockEntity {
         //entity.network = new EngineNetwork();
 
         if (!level.isClientSide) {
-            System.out.println();
-            if (entity.lifetime == 0)
-                //NetworkUtil.attemptNetworkCreation(pos, level, entity);
+            if (entity.lifetime == 0) {
+                entity.createNewNetwork();
                 entity.network.attemptNetworkCreation(pos, level, entity);
+            }
 
             //DO TICK STUFF
             if (level.getBlockState(pos).getBlock() != Blocks.VOID_AIR) {
@@ -62,7 +66,11 @@ public class TurbojetTestBlockEntity extends BlockEntity {
             if(entity.lifetime < 20) {
                 //applyForces(level, pos, entity);
                 //System.out.println("applied");
+                //entity.network.tick(level);
+
             }
+            System.out.println("tick from: " + entity.worldPosition);
+            entity.network.tick(level);
 
             entity.lifetime++;
         }

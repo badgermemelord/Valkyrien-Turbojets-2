@@ -33,7 +33,7 @@ public class NetworkManager {
         }*/
         for (Long key : networkList.keySet()) {
             EngineNetwork network = networkList.get(key);
-            network.tick(level, key);
+            //network.tick(level, key);
         }
     }
 

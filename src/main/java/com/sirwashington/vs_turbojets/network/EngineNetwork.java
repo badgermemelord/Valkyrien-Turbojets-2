@@ -17,22 +17,24 @@ public class EngineNetwork {
     public static int maxRange = 10;
     ArrayList<BlockPos> memberBlocks = new ArrayList<>();
     Direction networkFacing;
-    Long LongPos;
+    private float lastTickTime;
 
-    public void attemptNetworkCreation(BlockPos sourcePos, Level world, TurbojetTestBlockEntity networkCreator) {
-
-        networkFacing = world.getBlockState(sourcePos).getValue(FACING);
+    public void attemptNetworkCreation(BlockPos sourcePos, Level level, TurbojetTestBlockEntity networkCreator) {
+        //Clear Old values
+        //resetNetwork();
+        networkFacing = level.getBlockState(sourcePos).getValue(FACING);
         Vec3i facingVector = networkFacing.getNormal();
-        LongPos = sourcePos.asLong();
         System.out.println("started network creation from: " + sourcePos);
+
+
         memberBlocks.add(sourcePos);
         //Forward loop
         for (int i = 1; i <= maxRange; i++) {
             System.out.println("forward");
             BlockPos currentPos = sourcePos.offset(facingVector.multiply(i));
-            BlockState currentState = world.getBlockState(currentPos);
+            BlockState currentState = level.getBlockState(currentPos);
             if (isValidEngineBlock(currentState)) {
-                deleteLesserNetwork(currentPos, world);
+                deleteLesserNetwork(currentPos, level);
                 System.out.println("found an engine part");
                 memberBlocks.add(currentPos);
             }
@@ -45,9 +47,9 @@ public class EngineNetwork {
         for (int i = -1; i >= -maxRange; i--) {
             System.out.println("rearward");
             BlockPos currentPos = sourcePos.offset(facingVector.multiply(i));
-            BlockState currentState = world.getBlockState(currentPos);
+            BlockState currentState = level.getBlockState(currentPos);
             if (isValidEngineBlock(currentState)) {
-                deleteLesserNetwork(currentPos, world);
+                deleteLesserNetwork(currentPos, level);
                 System.out.println("found an engine part");
                 memberBlocks.add(currentPos);
             }
@@ -56,31 +58,59 @@ public class EngineNetwork {
                 break;
             }
         }
-        NetworkManager.addNetworkToList(this, LongPos);
+
+        spreadNetworkToMembers(level);
+
         System.out.println("finished creation, list: " + memberBlocks);
 
     }
 
-    public void performBlockCheck() {
+    public float getLastTickTime() {
+        return lastTickTime;
+    }
 
+    private void resetNetwork() {
+        memberBlocks = new ArrayList<>();
+        lastTickTime = 0;
+    }
+
+    public void setCurrentTickTime(float newTime) {
+        lastTickTime = newTime;
+    }
+
+    private boolean hasTickedThisTick(float currentTime) {
+        return currentTime == lastTickTime;
     }
 
     public boolean isValidEngineBlock(BlockState state) {
         return state.is(ModTags.Blocks.TURBOJET_PART_BLOCKS) && state.getValue(FACING).equals(networkFacing);
     }
 
+    public void spreadNetworkToMembers(Level level) {
+        for (BlockPos pos : memberBlocks) {
+            TurbojetTestBlockEntity internal = (TurbojetTestBlockEntity) level.getBlockEntity(pos);
+                if (internal != null) {
+                    internal.setNetwork(this);
+                }
+        }
+    }
+
     public void deleteLesserNetwork(BlockPos pos, Level level) {
         TurbojetTestBlockEntity internalEntity = (TurbojetTestBlockEntity)level.getBlockEntity(pos);
         if (internalEntity != null) {
             internalEntity.clearNetwork();
-            NetworkManager.removeNetworkFromList(internalEntity.getNetwork().LongPos);
         }
     }
 
-    public static void tick(Level level, Long key) {
+    public void tick(Level level) {
+        System.out.println("can tick: " + !hasTickedThisTick(level.getTimeOfDay(1f)));
+        System.out.println("attempting tick of network: " + this.memberBlocks);
+        if (hasTickedThisTick(level.getTimeOfDay(1f)))
+            return;
 
-        System.out.println("Started tick of network: " + NetworkManager.networkList.get(key));
+        System.out.println("within tick of network: " + this.memberBlocks);
 
+        setCurrentTickTime(level.getTimeOfDay(1f));
     }
 
 }

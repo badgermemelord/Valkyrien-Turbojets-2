@@ -14,57 +14,18 @@ import static com.sirwashington.vs_turbojets.block.custom.TurbojetTestBlock.FACI
 
 public class NetworkUtil {
 
-    public static int maxRange = 10;
-
-    public static ArrayList<BlockPos> memberBlocks = new ArrayList<>();
-
-
-    public static void attemptNetworkCreation(BlockPos sourcePos, Level world, TurbojetTestBlockEntity networkCreator) {
-
-        Direction networkFacing = world.getBlockState(sourcePos).getValue(FACING);
-        Vec3i facingVector = networkFacing.getNormal();
-
-        System.out.println("started network creation");
-/*        for (int i = -maxRange; i <= maxRange; i++) {
-            BlockPos currentPos = sourcePos.offset(facingVector.multiply(i));
-            BlockState currentState = world.getBlockState(currentPos);
-            System.out.println("pos: " + currentPos + " state: " + currentState);
-            if (currentState.is(ModTags.Blocks.TURBOJET_PART_BLOCKS)) {
-                System.out.println("found an engine part");
-            }
-        }*/
-        //Forward loop
-        for (int i = 0; i <= maxRange; i++) {
-            BlockPos currentPos = sourcePos.offset(facingVector.multiply(i));
-            BlockState currentState = world.getBlockState(currentPos);
-            if (currentState.is(ModTags.Blocks.TURBOJET_PART_BLOCKS)) {
-                System.out.println("found an engine part");
-                memberBlocks.add(currentPos);
-            }
-            else {
-                break;
+    public static void updateNeighbours(Level level, BlockPos pos) {
+        System.out.println("performerd neighbour uzpdate");
+        for (Direction dir : Direction.values()) {
+            BlockPos internal = pos.offset(dir.getNormal());
+            if (level.getBlockState(internal).is(ModTags.Blocks.TURBOJET_PART_BLOCKS)) {
+                TurbojetTestBlockEntity entity = (TurbojetTestBlockEntity) level.getBlockEntity(internal);
+                entity.createNewNetwork();
+                entity.getNetwork().attemptNetworkCreation(internal, level, entity);
             }
         }
-        //Backwards loop
-        for (int i = 1; i >= -maxRange; i--) {
-            BlockPos currentPos = sourcePos.offset(facingVector.multiply(i));
-            BlockState currentState = world.getBlockState(currentPos);
-            if (currentState.is(ModTags.Blocks.TURBOJET_PART_BLOCKS)) {
-                System.out.println("found an engine part");
-                memberBlocks.add(currentPos);
-            }
-            else {
-                break;
-            }
-        }
-
-        System.out.println("finished creation, list: " + memberBlocks);
-
     }
 
-    public static void createNetwork() {
-
-    }
 
 
 }
