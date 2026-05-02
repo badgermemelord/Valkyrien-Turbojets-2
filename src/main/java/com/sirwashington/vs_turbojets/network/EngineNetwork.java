@@ -1,5 +1,6 @@
 package com.sirwashington.vs_turbojets.network;
 
+import com.sirwashington.vs_turbojets.block.custom.EngineBlockEntity;
 import com.sirwashington.vs_turbojets.block.entity.TurbojetTestBlockEntity;
 import com.sirwashington.vs_turbojets.util.ModTags;
 import net.minecraft.core.BlockPos;
@@ -19,7 +20,7 @@ public class EngineNetwork {
     Direction networkFacing;
     private float lastTickTime;
 
-    public void attemptNetworkCreation(BlockPos sourcePos, Level level, TurbojetTestBlockEntity networkCreator) {
+    public void attemptNetworkCreation(BlockPos sourcePos, Level level, EngineBlockEntity networkCreator) {
         System.out.println("started network creation from: " + sourcePos);
 
         networkFacing = level.getBlockState(sourcePos).getValue(FACING);
@@ -75,7 +76,7 @@ public class EngineNetwork {
 
     public void spreadNetworkToMembers(Level level) {
         for (BlockPos pos : memberBlocks) {
-            TurbojetTestBlockEntity internal = (TurbojetTestBlockEntity) level.getBlockEntity(pos);
+            EngineBlockEntity internal = (EngineBlockEntity)level.getBlockEntity(pos);
                 if (internal != null) {
                     internal.setNetwork(this);
                 }
@@ -83,7 +84,7 @@ public class EngineNetwork {
     }
 
     public void deleteLesserNetwork(BlockPos pos, Level level) {
-        TurbojetTestBlockEntity internalEntity = (TurbojetTestBlockEntity)level.getBlockEntity(pos);
+        EngineBlockEntity internalEntity = (EngineBlockEntity)level.getBlockEntity(pos);
         if (internalEntity != null) {
             internalEntity.clearNetwork();
         }

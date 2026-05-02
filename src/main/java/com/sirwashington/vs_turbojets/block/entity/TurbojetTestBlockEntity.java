@@ -1,5 +1,6 @@
 package com.sirwashington.vs_turbojets.block.entity;
 
+import com.sirwashington.vs_turbojets.block.custom.EngineBlockEntity;
 import com.sirwashington.vs_turbojets.network.EngineNetwork;
 import com.sirwashington.vs_turbojets.network.NetworkUtil;
 import net.minecraft.core.BlockPos;
@@ -53,7 +54,7 @@ public class TurbojetTestBlockEntity extends BlockEntity {
         if (!level.isClientSide) {
             if (entity.lifetime == 0) {
                 entity.createNewNetwork();
-                entity.network.attemptNetworkCreation(pos, level, entity);
+                entity.network.attemptNetworkCreation(pos, level, (EngineBlockEntity)entity);
             }
 
             entity.network.tick(level);

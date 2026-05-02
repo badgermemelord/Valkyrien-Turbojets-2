@@ -1,5 +1,6 @@
 package com.sirwashington.vs_turbojets.block.entity;
 
+import com.sirwashington.vs_turbojets.block.custom.EngineBlockEntity;
 import com.sirwashington.vs_turbojets.network.EngineNetwork;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -14,7 +15,7 @@ import org.valkyrienskies.mod.common.ValkyrienSkiesMod;
 import org.valkyrienskies.mod.common.util.GameToPhysicsAdapter;
 
 
-public class CompressorBlockEntity extends BlockEntity {
+public class CompressorBlockEntity extends BlockEntity implements EngineBlockEntity {
 
     private int lifetime = 0;
 
@@ -22,7 +23,7 @@ public class CompressorBlockEntity extends BlockEntity {
 
 
     public CompressorBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModBlockEntities.TURBOJET_TEST_BLOCK_ENTITY, blockPos, blockState);
+        super(ModBlockEntities.COMPRESSOR_BLOCK_ENTITY, blockPos, blockState);
     }
 
     public int getLifeTime() {

@@ -1,5 +1,6 @@
 package com.sirwashington.vs_turbojets.block.custom;
 
+import com.sirwashington.vs_turbojets.block.entity.CompressorBlockEntity;
 import com.sirwashington.vs_turbojets.block.entity.ModBlockEntities;
 import com.sirwashington.vs_turbojets.block.entity.TurbojetTestBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -54,13 +55,13 @@ public class CompressorBlock extends BaseEntityBlock implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new TurbojetTestBlockEntity(pos, state);
+        return new CompressorBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return createTickerHelper(blockEntityType, ModBlockEntities.TURBOJET_TEST_BLOCK_ENTITY, TurbojetTestBlockEntity::tick);
+        return createTickerHelper(blockEntityType, ModBlockEntities.COMPRESSOR_BLOCK_ENTITY, CompressorBlockEntity::tick);
     }
 
 }

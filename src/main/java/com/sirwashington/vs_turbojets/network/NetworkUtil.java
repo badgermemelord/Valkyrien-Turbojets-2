@@ -1,5 +1,6 @@
 package com.sirwashington.vs_turbojets.network;
 
+import com.sirwashington.vs_turbojets.block.custom.EngineBlockEntity;
 import com.sirwashington.vs_turbojets.block.entity.TurbojetTestBlockEntity;
 import com.sirwashington.vs_turbojets.util.ModTags;
 import net.minecraft.core.BlockPos;
@@ -21,7 +22,7 @@ public class NetworkUtil {
             if (level.getBlockState(internal).is(ModTags.Blocks.TURBOJET_PART_BLOCKS)) {
                 TurbojetTestBlockEntity entity = (TurbojetTestBlockEntity) level.getBlockEntity(internal);
                 entity.createNewNetwork();
-                entity.getNetwork().attemptNetworkCreation(internal, level, entity);
+                entity.getNetwork().attemptNetworkCreation(internal, level, (EngineBlockEntity)entity);
             }
         }
     }
