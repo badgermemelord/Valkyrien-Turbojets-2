@@ -1,8 +1,7 @@
 package com.sirwashington.vs_turbojets.block.custom;
 
-import com.sirwashington.vs_turbojets.block.entity.CompressorBlockEntity;
 import com.sirwashington.vs_turbojets.block.entity.ModBlockEntities;
-import com.sirwashington.vs_turbojets.block.entity.TurbojetTestBlockEntity;
+import com.sirwashington.vs_turbojets.block.entity.TurbojetBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.Nullable;
 
-public class CompressorBlock extends BaseEntityBlock implements EntityBlock {
+public class CompressorBlock extends AbstractEngineBlock implements EntityBlock {
 
 
     public static final DirectionProperty FACING;
@@ -31,6 +30,7 @@ public class CompressorBlock extends BaseEntityBlock implements EntityBlock {
     public RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.MODEL;
     }
+
     public CompressorBlock(Properties properties) {
         super(properties);
         this.registerDefaultState((BlockState)this.defaultBlockState().setValue(FACING, Direction.NORTH));
@@ -55,13 +55,13 @@ public class CompressorBlock extends BaseEntityBlock implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new CompressorBlockEntity(pos, state);
+        return new TurbojetBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return createTickerHelper(blockEntityType, ModBlockEntities.COMPRESSOR_BLOCK_ENTITY, CompressorBlockEntity::tick);
+        return createTickerHelper(blockEntityType, ModBlockEntities.TURBOJET_BLOCK_ENTITY, TurbojetBlockEntity::tick);
     }
 
 }

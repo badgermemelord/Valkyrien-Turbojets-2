@@ -11,15 +11,13 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class ModBlockEntities {
 
-    public static final BlockEntityType<TurbojetTestBlockEntity> TURBOJET_TEST_BLOCK_ENTITY =
-            Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(VSTurbojetsMod.MOD_ID, "turbojet_test_be"),
-                    FabricBlockEntityTypeBuilder.create(TurbojetTestBlockEntity::new,
-                            ModBlocks.TURBOJET_TEST_BLOCK).build());
+    public static final BlockEntityType<TurbojetBlockEntity> TURBOJET_BLOCK_ENTITY =
+            Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(VSTurbojetsMod.MOD_ID, "turbojet_be"),
+                    FabricBlockEntityTypeBuilder.create(TurbojetBlockEntity::new,
+                            ModBlocks.COMPRESSOR_BLOCK,
+                            ModBlocks.TURBINE_BLOCK
+                    ).build());
 
-    public static final BlockEntityType<CompressorBlockEntity> COMPRESSOR_BLOCK_ENTITY =
-            Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(VSTurbojetsMod.MOD_ID, "compressor_be"),
-                    FabricBlockEntityTypeBuilder.create(CompressorBlockEntity::new,
-                            ModBlocks.COMPRESSOR_BLOCK).build());
 
     public static void registerBlockEntities() {
         VSTurbojetsMod.LOGGER.info("Registering Block Entities for " + VSTurbojetsMod.MOD_ID);

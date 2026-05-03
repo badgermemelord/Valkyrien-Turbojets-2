@@ -1,7 +1,8 @@
 package com.sirwashington.vs_turbojets.block;
 
 import com.sirwashington.vs_turbojets.VSTurbojetsMod;
-import com.sirwashington.vs_turbojets.block.custom.TurbojetTestBlock;
+import com.sirwashington.vs_turbojets.block.custom.CompressorBlock;
+import com.sirwashington.vs_turbojets.block.custom.TurbineBlock;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
@@ -14,11 +15,14 @@ import net.minecraft.world.level.block.Blocks;
 
 public class ModBlocks {
 
-    public static final Block TURBOJET_TEST_BLOCK = registerBlock("turbojet_test_block",
-            new TurbojetTestBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
+/*    public static final Block TURBOJET_TEST_BLOCK = registerBlock("turbojet_test_block",
+            new TurbojetTestBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));*/
 
     public static final Block COMPRESSOR_BLOCK = registerBlock("compressor_block",
-            new TurbojetTestBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
+            new CompressorBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
+
+    public static final Block TURBINE_BLOCK = registerBlock("turbine_block",
+            new TurbineBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);
