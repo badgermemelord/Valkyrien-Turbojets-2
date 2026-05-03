@@ -15,7 +15,8 @@ public class ModBlockEntities {
             Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(VSTurbojetsMod.MOD_ID, "turbojet_be"),
                     FabricBlockEntityTypeBuilder.create(TurbojetBlockEntity::new,
                             ModBlocks.COMPRESSOR_BLOCK,
-                            ModBlocks.TURBINE_BLOCK
+                            ModBlocks.TURBINE_BLOCK,
+                            ModBlocks.COMBUSTION_CHAMBER_BLOCK
                     ).build());
 
 

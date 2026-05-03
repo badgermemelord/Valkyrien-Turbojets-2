@@ -19,37 +19,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class CompressorBlock extends AbstractEngineBlock implements EntityBlock {
 
-
-    public static final DirectionProperty FACING;
-
-    static {
-        FACING = BlockStateProperties.FACING;
-    }
-
-    @Override
-    public RenderShape getRenderShape(BlockState blockState) {
-        return RenderShape.MODEL;
-    }
-
     public CompressorBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState((BlockState)this.defaultBlockState().setValue(FACING, Direction.NORTH));
-    }
-
-    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        return (BlockState)((BlockState)this.defaultBlockState().setValue(FACING, blockPlaceContext.getNearestLookingDirection().getOpposite()));
-    }
-
-    public BlockState rotate(BlockState blockState, Rotation rotation) {
-        return (BlockState)blockState.setValue(FACING, rotation.rotate((Direction)blockState.getValue(FACING)));
-    }
-
-    public BlockState mirror(BlockState blockState, Mirror mirror) {
-        return blockState.rotate(mirror.getRotation((Direction)blockState.getValue(FACING)));
-    }
-
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(new Property[]{FACING});
     }
 
     @Nullable

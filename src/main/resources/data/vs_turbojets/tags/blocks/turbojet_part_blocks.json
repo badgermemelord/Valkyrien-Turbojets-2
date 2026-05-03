@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "vs_turbojets:turbojet_test_block"
+    "vs_turbojets:compressor_block",
+    "vs_turbojets:turbine_block"
   ]
 }

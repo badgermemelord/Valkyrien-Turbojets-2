@@ -24,6 +24,10 @@ public class ModBlocks {
     public static final Block TURBINE_BLOCK = registerBlock("turbine_block",
             new TurbineBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
 
+    public static final Block COMBUSTION_CHAMBER_BLOCK = registerBlock("combustion_chamber_block",
+            new TurbineBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
+
+
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(VSTurbojetsMod.MOD_ID, name), block);
