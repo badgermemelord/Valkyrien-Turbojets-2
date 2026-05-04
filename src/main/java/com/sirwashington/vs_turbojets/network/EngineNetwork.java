@@ -1,5 +1,6 @@
 package com.sirwashington.vs_turbojets.network;
 
+import com.sirwashington.vs_turbojets.block.ModBlocks;
 import com.sirwashington.vs_turbojets.block.entity.TurbojetBlockEntity;
 import com.sirwashington.vs_turbojets.util.ModTags;
 import net.minecraft.core.BlockPos;
@@ -31,32 +32,50 @@ public class EngineNetwork {
 
         networkFacing = level.getBlockState(sourcePos).getValue(FACING);
         Vec3i facingVector = networkFacing.getNormal();
-        memberBlocks.add(sourcePos);
+
+        BlockPos startPos = null;
 
         //Forward loop
-        for (int i = 1; i <= maxRange; i++) {
+        for (int i = 0; i <= maxRange; i++) {
             BlockPos currentPos = sourcePos.offset(facingVector.multiply(i));
             BlockState currentState = level.getBlockState(currentPos);
-            if (isValidEngineBlock(currentState)) {
-                deleteLesserNetwork(currentPos, level);
-                memberBlocks.add(currentPos);
+            if (!isValidEngineBlock(level.getBlockState(currentPos.offset(facingVector)))) {
+                if (isValidEngineTipBlock(currentState))
+                    startPos = currentPos;
+                break;
             }
-            else break;
         }
         //Backwards loop
         for (int i = -1; i >= -maxRange; i--) {
             BlockPos currentPos = sourcePos.offset(facingVector.multiply(i));
             BlockState currentState = level.getBlockState(currentPos);
+            if (!isValidEngineBlock(level.getBlockState(currentPos.offset(facingVector.multiply(-1))))) {
+                if (isValidEngineTipBlock(currentState))
+                    startPos = currentPos;
+                break;
+            }
+        }
+        System.out.println("startpos: " + startPos);
+        if (startPos != null) {
+            attemptNetworkCreationFromTip(startPos, facingVector.multiply(-1), level);
+        }
+
+
+        System.out.println("finished creation, list: " + memberBlocks);
+    }
+
+    public void attemptNetworkCreationFromTip(BlockPos tip, Vec3i rearFacing, Level level) {
+
+        for (int i = 0; i <= 2 * maxRange + 1; i++) {
+            BlockPos currentPos = tip.offset(rearFacing.multiply(i));
+            BlockState currentState = level.getBlockState(currentPos);
             if (isValidEngineBlock(currentState)) {
                 deleteLesserNetwork(currentPos, level);
                 memberBlocks.add(currentPos);
             }
             else break;
-
         }
         spreadNetworkToMembers(level);
-
-        System.out.println("finished creation, list: " + memberBlocks);
     }
 
     public float getLastTickTime() {
@@ -78,6 +97,10 @@ public class EngineNetwork {
 
     public boolean isValidEngineBlock(BlockState state) {
         return state.is(ModTags.Blocks.TURBOJET_PART_BLOCKS) && state.getValue(FACING).equals(networkFacing);
+    }
+
+    public boolean isValidEngineTipBlock(BlockState state) {
+        return state.getBlock() == ModBlocks.COMPRESSOR_BLOCK && state.getValue(FACING).equals(networkFacing);
     }
 
     public void spreadNetworkToMembers(Level level) {
