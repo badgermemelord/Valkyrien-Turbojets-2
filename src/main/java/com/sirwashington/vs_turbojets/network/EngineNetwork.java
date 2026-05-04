@@ -60,20 +60,32 @@ public class EngineNetwork {
             attemptNetworkCreationFromTip(startPos, facingVector.multiply(-1), level);
         }
 
-
         System.out.println("finished creation, list: " + memberBlocks);
     }
 
     public void attemptNetworkCreationFromTip(BlockPos tip, Vec3i rearFacing, Level level) {
+        BlockState previousState = level.getBlockState(tip);
+        memberBlocks.add(tip);
 
-        for (int i = 0; i <= 2 * maxRange + 1; i++) {
+        for (int i = 1; i <= 2 * maxRange + 1; i++) {
             BlockPos currentPos = tip.offset(rearFacing.multiply(i));
             BlockState currentState = level.getBlockState(currentPos);
-            if (isValidEngineBlock(currentState)) {
+
+
+            if (isValidSuccession(previousState, currentState)) {
                 deleteLesserNetwork(currentPos, level);
                 memberBlocks.add(currentPos);
             }
-            else break;
+            else {
+                System.out.println("invalid succession at: " + currentPos);
+                break;
+            }
+/*            if (isValidEngineBlock(currentState)) {
+                deleteLesserNetwork(currentPos, level);
+                memberBlocks.add(currentPos);
+            }*/
+            //else break;
+            previousState = currentState;
         }
         spreadNetworkToMembers(level);
     }
@@ -85,6 +97,17 @@ public class EngineNetwork {
     private void resetNetwork() {
         memberBlocks = new ArrayList<>();
         lastTickTime = 0;
+    }
+
+    private boolean isValidSuccession(BlockState prev, BlockState next) {
+        if (prev.getBlock() == next.getBlock())
+            return true;
+        if (prev.getBlock() == ModBlocks.COMPRESSOR_BLOCK && next.getBlock() == ModBlocks.COMBUSTION_CHAMBER_BLOCK)
+            return true;
+        if (prev.getBlock() == ModBlocks.COMBUSTION_CHAMBER_BLOCK && next.getBlock() == ModBlocks.TURBINE_BLOCK)
+            return true;
+        return false;
+
     }
 
     public void setCurrentTickTime(float newTime) {
